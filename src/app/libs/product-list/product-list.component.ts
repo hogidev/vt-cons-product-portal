@@ -1,17 +1,20 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
+
+type viewType = 'grid' | 'list';
 
 @Component({
   selector: 'app-product-list',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, RouterModule],
   templateUrl: './product-list.component.html',
   styleUrls: ['./product-list.component.scss']
 })
 export class ProductListComponent {
   searchForm!: FormGroup;
+  typeView: viewType = 'grid';
 
   constructor(
     private fb: FormBuilder,
@@ -32,5 +35,9 @@ export class ProductListComponent {
 
   addProduct() {
     this.router.navigate(['add'])
+  }
+
+  selectTypeView(type: viewType) {
+    this.typeView = type;
   }
 }
