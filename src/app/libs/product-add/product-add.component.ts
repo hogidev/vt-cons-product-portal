@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
 @Component({
@@ -17,9 +17,15 @@ export class ProductAddComponent {
     private fb: FormBuilder
   ) {
     this.formNewProduct = this.fb.group({
-      productName: this.fb.control(''),
-      productCode: this.fb.control(''),
-      productDescription: this.fb.control('')
+      productName: this.fb.control('', [Validators.required]),
+      productCode: this.fb.control('', [Validators.required]),
+      productDescription: this.fb.control(''),
+      discount: this.fb.control(null),
+      price: this.fb.control(0, [Validators.required])
     })
+  }
+
+  submit() {
+    console.log(this.formNewProduct.value)
   }
 }
