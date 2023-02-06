@@ -1,5 +1,5 @@
 <div class="container">
-  <form [formGroup]="searchForm">
+  <form [formGroup]="searchForm" (submit)="submitSearchForm()" class="mb-4">
     <div class="search-container">
       <label
         for="search-input"
@@ -13,14 +13,18 @@
         id="search-input"
         class="search-input"
         formControlName="searchText"
-        placeholder="Search products"
+        placeholder="Tìm kiếm sản phẩm"
         maxlength="64"
       />
-      <button type="reset" class="btn-search-reset">
+      <button type="button" class="btn-search-reset" [class.d-none]="!searchForm.get('searchText')?.value" (click)="resetInputSearch()">
         <svg width="20" height="20" viewBox="0 0 20 20">
           <path d="M10 10l5.09-5.09L10 10l5.09 5.09L10 10zm0 0L4.91 4.91 10 10l-5.09 5.09L10 10z" stroke="currentColor" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round"></path>
         </svg>
       </button>
     </div>
   </form>
+  <div class="d-flex justify-content-between">
+    <div class="fs-4 fw-semibold">Danh sách sản phẩm</div>
+    <button type="button" class="btn btn-primary" (click)="addProduct()">Thêm mới</button>
+  </div>
 </div>
