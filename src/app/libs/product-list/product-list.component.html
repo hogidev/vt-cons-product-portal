@@ -4,6 +4,7 @@
       <div class="search-container">
         <label
           for="search-input"
+          (click)="submitSearchForm()"
         >
           <svg width="20" height="20" class="search-icon" viewBox="0 0 20 20">
             <path d="M14.386 14.386l4.0877 4.0877-4.0877-4.0877c-2.9418 2.9419-7.7115 2.9419-10.6533 0-2.9419-2.9418-2.9419-7.7115 0-10.6533 2.9418-2.9419 7.7115-2.9419 10.6533 0 2.9419 2.9418 2.9419 7.7115 0 10.6533z" stroke="currentColor" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -43,7 +44,7 @@
   </div>
   <div>
     <div class="vt-grid vt-lg-grid-cols-4 vt-md-grid-cols-3 vt-sm-grid-cols-2 gap-4">
-      <div class="card">
+      <div class="card" *ngFor="let product of products$ | async">
         <img
           src="https://iweb.tatthanh.com.vn/pic/9/thumb/medium/product/50147_4600_camera_ezviz_c6n.png"
           class="card-img-top"
@@ -51,11 +52,11 @@
           routerLink="/add"
         >
         <div class="card-body">
-          <a class="card-title" href="#">Camera quan sát CS-C6N-A0-1C2WFR</a>
-          <div class="price mt-2">523.000đ</div>
+          <a class="card-title" href="#">{{ product.productName }}</a>
+          <div class="price mt-2">{{ product.price | currency: 'VND' }}</div>
           <div class="mb-3">
-            <span class="item-price-wd">593.000đ</span>
-            <span class="badge text-bg-danger">-20%</span>
+            <span class="item-price-wd">{{ product.price | currency: 'VND'}}</span>
+            <span class="badge text-bg-danger">-{{ product.discount }}%</span>
           </div>
           <a href="#" class="text-decoration-none">
             Xem chi tiết

@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
+import { ProductService } from '../../services/product.service';
 
 @Component({
   selector: 'app-product-add',
@@ -14,7 +15,9 @@ export class ProductAddComponent {
   formNewProduct!: FormGroup;
 
   constructor(
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private productService: ProductService,
+    private router: Router
   ) {
     this.formNewProduct = this.fb.group({
       productName: this.fb.control('', [Validators.required]),
@@ -26,6 +29,10 @@ export class ProductAddComponent {
   }
 
   submit() {
-    console.log(this.formNewProduct.value)
+    this.productService.addProduct({
+      id: new Date().getTime().toString(),
+      ...this.formNewProduct.getRawValue()
+    });
+    this.router.navigate(['products']);
   }
 }
