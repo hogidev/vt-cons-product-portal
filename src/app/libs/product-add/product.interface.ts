@@ -5,4 +5,5 @@ export interface Product {
   productDescription?: string;
   discount?: number;
   price: number;
+  descriptions?: string[];
 }

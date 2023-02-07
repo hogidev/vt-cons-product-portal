@@ -24,7 +24,7 @@ export class ProductAddComponent {
       productCode: this.fb.control('', [Validators.required]),
       productDescription: this.fb.control(''),
       discount: this.fb.control(null),
-      price: this.fb.control(0, [Validators.required])
+      price: this.fb.control(null, [Validators.required])
     })
   }
 
