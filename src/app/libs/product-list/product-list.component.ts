@@ -23,6 +23,7 @@ export class ProductListComponent implements OnInit {
   showSearchTxt = '';
   categories!: Category[];
   products!: Array<ProductCategory>;
+  imgSrc = '';
 
   constructor(
     private fb: FormBuilder,
@@ -76,8 +77,11 @@ export class ProductListComponent implements OnInit {
   }
 
   getProduct(filter?: string) {
-    this.productService.getProducts(filter).subscribe((products) => {
+    this.productService.getProducts().subscribe((products) => {
       if (products && products.length) {
+        if (filter) {
+          products = products.filter(item => item.productCode.includes(filter) || item.productName.includes(filter));
+        }
         const res = products.reduce((acc: {[key: string]: any} = {}, curr) => (
           (acc[curr.categoryCode] = acc[curr.categoryCode] || []).push(curr), acc
         ), {});

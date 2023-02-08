@@ -9,7 +9,12 @@
   </a>
   <div class="row mt-3" *ngIf="product">
     <div class="col-5">
-      image
+      <img
+        *ngFor="let img of product.images"
+        [src]="img"
+        alt="Product image"
+        class="img-product"
+      >
     </div>
     <div class="col-7">
       <h3>{{ product.productName }}</h3>

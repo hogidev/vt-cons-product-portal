@@ -32,12 +32,9 @@ export class ProductService {
     let q = query(productRef, where('id', '==', product.id));
   }
 
-  getProducts(filter = '') {
+  getProducts() {
     const productRef = collection(this.firestore, 'products');
     let q = query(productRef);
-    if (filter) {
-      q = query(productRef, where('productName', '==', filter));
-    }
     return collectionData(q) as unknown as Observable<Product[]>;
   }
 

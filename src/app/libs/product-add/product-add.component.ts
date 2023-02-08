@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
@@ -14,6 +14,7 @@ import { Observable } from 'rxjs';
   styleUrls: ['./product-add.component.scss']
 })
 export class ProductAddComponent implements OnInit {
+  @ViewChild('file') fileInput!: ElementRef;
   formNewProduct!: FormGroup;
   categories$!: Observable<Category[]>;
 
@@ -28,7 +29,8 @@ export class ProductAddComponent implements OnInit {
       productDescription: this.fb.control(''),
       discount: this.fb.control(0),
       price: this.fb.control(null, [Validators.required]),
-      categoryCode: this.fb.control(null, [Validators.required])
+      categoryCode: this.fb.control(null, [Validators.required]),
+      images: this.fb.control(null)
     })
   }
 
@@ -37,12 +39,37 @@ export class ProductAddComponent implements OnInit {
   }
 
   submit() {
-    if (this.formNewProduct.valid) {
-      this.productService.addProduct({
-        id: new Date().getTime().toString(),
-        ...this.formNewProduct.getRawValue()
-      });
-      this.router.navigate(['products']);
+    if (this.formNewProduct.invalid) {
+      return;
     }
+    if (!this.formNewProduct.get('images')?.value) {
+      alert('Vui lòng upload ảnh sản phẩm');
+      return;
+    }
+    this.productService.addProduct({
+      id: new Date().getTime().toString(),
+      ...this.formNewProduct.getRawValue()
+    });
+    this.fileInput.nativeElement.value = null;
+    this.router.navigate(['products']);
+  }
+
+  onChooseFile(files: File[]) {
+    Object.keys(files)?.forEach((file, i) => {
+      if (files[i].size > 1024000) {
+        alert(`File ${files[i].name} vượt quá 1Mb, tải lại file mới`);
+        this.fileInput.nativeElement.value = null;
+        return;
+      }
+    });
+    let images: any[] = [];
+    Object.keys(files)?.forEach((file, i) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(files[i]);
+      reader.onload = () => {
+        images.push(reader.result)
+      };
+    });
+    this.formNewProduct.get('images')?.setValue(images);
   }
 }

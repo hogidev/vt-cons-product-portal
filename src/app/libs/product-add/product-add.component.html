@@ -39,11 +39,19 @@
       <textarea class="form-control" id="description" formControlName="productDescription"></textarea>
     </div>
     <div class="col-12">
+      <label for="images" class="form-label">Hình ảnh</label>
+      <input
+        type="file"
+        class="form-control"
+        id="images"
+        multiple
+        (change)="onChooseFile($any($event.target).files)"
+        accept="image/jpeg, image/png"
+        #file
+      >
+    </div>
+    <div class="col-12">
       <button type="submit" class="btn btn-primary" [disabled]="!formNewProduct.valid">Tạo mới</button>
     </div>
-<!--    <div class="col-12">-->
-<!--      <label for="exampleFormControlFile1">Example file input</label>-->
-<!--      <input type="file" class="form-control-file" id="exampleFormControlFile1">-->
-<!--    </div>-->
   </form>
 </div>

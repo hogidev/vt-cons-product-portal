@@ -50,10 +50,10 @@
       <div class="vt-grid vt-lg-grid-cols-4 vt-md-grid-cols-3 vt-sm-grid-cols-2 shadow-sm">
         <div class="card" *ngFor="let item of product.products">
           <img
-            src="https://iweb.tatthanh.com.vn/pic/9/thumb/medium/product/50147_4600_camera_ezviz_c6n.png"
+            *ngIf="item.images && item.images.length"
+            [src]="item.images[0]"
             class="card-img-top"
-            alt="..."
-            routerLink="/add"
+            alt="Product image"
             [routerLink]="['/product', item.id]"
           >
           <div class="card-body">
