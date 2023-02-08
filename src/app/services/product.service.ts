@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { addDoc, collection, collectionData, Firestore, query, where } from '@angular/fire/firestore';
 import { Product } from '../libs/product-add/product.interface';
 import { Observable } from 'rxjs';
+import { Category } from '../libs/product-add/category.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -28,6 +29,12 @@ export class ProductService {
       q = query(productRef, where('productName', '==', filter));
     }
     return collectionData(q) as unknown as Observable<Product[]>;
+  }
+
+  getCategories() {
+    const categoriesRef = collection(this.firestore, 'categories');
+    let c = query(categoriesRef);
+    return collectionData(c) as unknown as Observable<Category[]>;
   }
 
   getProductById(id: string) {

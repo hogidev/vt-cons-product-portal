@@ -60,9 +60,12 @@
   position: relative;
   background-color: #fff;
   background-clip: border-box;
-  border: 0 solid #fff;
-  border-radius: 4px;
-  box-shadow: 0 4px 9px 0 rgb(0 0 0 / 12%);
+  border-radius: 0;
+
+  &:hover {
+    box-shadow: 0 4px 9px 0 rgb(0 0 0 / 12%);
+
+  }
 }
 
 .card-img-top {
@@ -156,4 +159,14 @@
 
 .vt-grid-cols-none {
   grid-template-columns: none;
+}
+
+.category-header {
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  background-color: #EE0033;
+  color: #fff;
+  font-size: 20px;
+  font-weight: bold;
+  padding: 6px 16px;
 }

@@ -28,7 +28,9 @@
     <button type="button" class="btn btn-primary" (click)="addProduct()">Thêm mới</button>
   </div>
   <div class="d-flex justify-content-between mb-3">
-    <div class="fs-4 fw-semibold">Danh sách sản phẩm</div>
+    <div>
+      <span class="fs-4 fw-semibold">Danh sách sản phẩm </span><span *ngIf="showSearchTxt">(Tìm kiếm {{ showSearchTxt }})</span>
+    </div>
     <div class="btn-group" role="group" aria-label="Basic example">
       <button type="button" class="btn" (click)="selectTypeView('grid')" [ngClass]="typeView === 'grid' ? 'btn-primary' : 'btn-secondary'">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-grid-fill" viewBox="0 0 16 16">
@@ -42,31 +44,39 @@
       </button>
     </div>
   </div>
-  <div>
-    <div class="vt-grid vt-lg-grid-cols-4 vt-md-grid-cols-3 vt-sm-grid-cols-2 gap-4">
-      <div class="card" *ngFor="let product of products$ | async">
-        <img
-          src="https://iweb.tatthanh.com.vn/pic/9/thumb/medium/product/50147_4600_camera_ezviz_c6n.png"
-          class="card-img-top"
-          alt="..."
-          routerLink="/add"
-          [routerLink]="['/product', product.id]"
-        >
-        <div class="card-body">
-          <a class="card-title" [routerLink]="['/product', product.id]">{{ product.productName }}</a>
-          <div class="price mt-2">{{ product.price | currency: 'VND' }}</div>
-          <div class="mb-3">
-            <span class="item-price-wd">{{ product.price | currency: 'VND'}}</span>
-            <span class="badge text-bg-danger">-{{ product.discount }}%</span>
+  <div *ngFor="let product of products" class="mb-3">
+    <ng-container *ngIf="product.key">
+      <div class="category-header">{{ product.key }}</div>
+      <div class="vt-grid vt-lg-grid-cols-4 vt-md-grid-cols-3 vt-sm-grid-cols-2 shadow-sm">
+        <div class="card" *ngFor="let item of product.products">
+          <img
+            src="https://iweb.tatthanh.com.vn/pic/9/thumb/medium/product/50147_4600_camera_ezviz_c6n.png"
+            class="card-img-top"
+            alt="..."
+            routerLink="/add"
+            [routerLink]="['/product', item.id]"
+          >
+          <div class="card-body">
+            <a class="card-title" [routerLink]="['/product', item.id]">{{ item.productName }}</a>
+            <div class="price mt-2" *ngIf="item.discount && item.discount > 0">
+              {{ item.price - item.price*(item.discount/100) | currency: 'VND'}}
+            </div>
+            <div class="price mt-2" *ngIf="!item.discount || item.discount === 0">
+              {{ item.price | currency: 'VND' }}
+            </div>
+            <div class="mb-3" *ngIf="item.discount">
+              <span class="item-price-wd">{{ item.price | currency: 'VND' }}</span>
+              <span class="badge text-bg-danger">-{{ item.discount }}%</span>
+            </div>
+            <a [routerLink]="['/product', item.id]" class="text-decoration-none">
+              Xem chi tiết
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"></path>
+              </svg>
+            </a>
           </div>
-          <a [routerLink]="['/product', product.id]" class="text-decoration-none">
-            Xem chi tiết
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
-              <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"></path>
-            </svg>
-          </a>
         </div>
       </div>
-    </div>
+    </ng-container>
   </div>
 </div>

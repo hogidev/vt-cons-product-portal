@@ -6,4 +6,10 @@ export interface Product {
   discount?: number;
   price: number;
   descriptions?: string[];
+  categoryCode: string;
+}
+
+export interface ProductCategory {
+  key: string;
+  products: Product[];
 }
