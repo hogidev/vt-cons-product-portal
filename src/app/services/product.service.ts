@@ -1,5 +1,15 @@
 import { Injectable } from '@angular/core';
-import { addDoc, collection, collectionData, Firestore, query, where } from '@angular/fire/firestore';
+import {
+  addDoc,
+  collection,
+  collectionData,
+  deleteDoc,
+  doc,
+  Firestore,
+  getDocs,
+  query,
+  where
+} from '@angular/fire/firestore';
 import { Product } from '../libs/product-add/product.interface';
 import { Observable } from 'rxjs';
 import { Category } from '../libs/product-add/category.interface';
@@ -41,5 +51,16 @@ export class ProductService {
     const productRef = collection(this.firestore, 'products');
     let q = query(productRef, where('id', '==', id));
     return collectionData(q) as unknown as Observable<Product[]>;
+  }
+
+  async deleteProduct(id: string) {
+    const productRef = collection(this.firestore, 'products');
+    let q = query(productRef, where('id', '==', id));
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach(async (document) => {
+      const docRef = doc(this.firestore, 'products', document.id);
+      await deleteDoc(docRef);
+    })
+
   }
 }

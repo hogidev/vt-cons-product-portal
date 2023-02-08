@@ -85,4 +85,14 @@ export class ProductListComponent implements OnInit {
       }
     });
   }
+
+  deleteProduct(id: string) {
+    if(confirm('Bạn có chắc chắn muốn xoá bản ghi?')) {
+      this.productService.deleteProduct(id)
+    }
+  }
+
+  editProduct() {
+    console.log('edit')
+  }
 }
