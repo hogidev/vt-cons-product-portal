@@ -75,8 +75,17 @@ export class ProductAddComponent implements OnInit {
       reader.readAsDataURL(files[i]);
       reader.onload = () => {
         images.push(reader.result)
+        this.formNewProduct.get('images')?.setValue([
+          ...this.formNewProduct.get('images')?.value,
+          ...images,
+        ]);
       };
     });
-    this.formNewProduct.get('images')?.setValue(images);
+  }
+
+  deleteImage(index: number) {
+    if (index > -1) {
+      this.formNewProduct.get('images')?.value.splice(index, 1);
+    }
   }
 }
