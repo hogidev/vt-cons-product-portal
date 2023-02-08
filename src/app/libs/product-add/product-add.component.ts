@@ -1,5 +1,5 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
+import { CommonModule, Location } from '@angular/common';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { ProductService } from '../../services/product.service';
@@ -17,6 +17,7 @@ export class ProductAddComponent implements OnInit {
   @ViewChild('file') fileInput!: ElementRef;
   formNewProduct!: FormGroup;
   categories$!: Observable<Category[]>;
+  _location = inject(Location);
 
   constructor(
     private fb: FormBuilder,
@@ -24,6 +25,7 @@ export class ProductAddComponent implements OnInit {
     private router: Router
   ) {
     this.formNewProduct = this.fb.group({
+      id: this.fb.control(new Date().getTime().toString()),
       productName: this.fb.control('', [Validators.required]),
       productCode: this.fb.control('', [Validators.required]),
       productDescription: this.fb.control(''),
@@ -35,6 +37,10 @@ export class ProductAddComponent implements OnInit {
   }
 
   ngOnInit() {
+    const product = (this._location.getState() as any).product;
+    if (product) {
+      this.formNewProduct.patchValue(product);
+    }
     this.categories$ = this.productService.getCategories();
   }
 
@@ -46,10 +52,11 @@ export class ProductAddComponent implements OnInit {
       alert('Vui lòng upload ảnh sản phẩm');
       return;
     }
-    this.productService.addProduct({
-      id: new Date().getTime().toString(),
-      ...this.formNewProduct.getRawValue()
-    });
+    if (this.formNewProduct.get('id')?.value) {
+      this.productService.updateProduct(this.formNewProduct.getRawValue());
+    } else {
+      this.productService.addProduct(this.formNewProduct.getRawValue());
+    }
     this.fileInput.nativeElement.value = null;
     this.router.navigate(['products']);
   }

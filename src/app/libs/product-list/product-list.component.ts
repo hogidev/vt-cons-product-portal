@@ -96,7 +96,11 @@ export class ProductListComponent implements OnInit {
     }
   }
 
-  editProduct() {
-    console.log('edit')
+  editProduct(product: Product) {
+    this.router.navigateByUrl('edit', {
+      state: {
+        product
+      }
+    });
   }
 }

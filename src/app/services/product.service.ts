@@ -7,7 +7,7 @@ import {
   doc,
   Firestore,
   getDocs,
-  query,
+  query, updateDoc,
   where
 } from '@angular/fire/firestore';
 import { Product } from '../libs/product-add/product.interface';
@@ -27,9 +27,16 @@ export class ProductService {
     return addDoc(productRef, product);
   }
 
-  updateProduct(product: Product) {
+  async updateProduct(product: Product) {
     const productRef = collection(this.firestore, 'products');
     let q = query(productRef, where('id', '==', product.id));
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach(async (document) => {
+      const docRef = doc(this.firestore, 'products', document.id);
+      await updateDoc(docRef, {
+        ...product
+      })
+    });
   }
 
   getProducts() {
