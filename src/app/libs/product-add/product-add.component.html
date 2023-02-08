@@ -18,7 +18,9 @@
       <input type="text" class="form-control" id="productName" formControlName="productName" required>
     </div>
     <div class="col-md-12">
-      <label for="categoryCode" class="form-label">Mã ngành</label>
+      <label for="categoryCode" class="form-label">
+        Mã ngành <a class="text-decoration-none" routerLink="/category">(Thêm mới mã ngành)</a>
+      </label>
       <select id="categoryCode" class="form-control form-select" formControlName="categoryCode" required>
         <option [ngValue]="null">Chọn ngành</option>
         <option *ngFor="let category of categories$ | async" [ngValue]="category.code">
@@ -64,7 +66,7 @@
         </div>
       </div>
     </div>
-    <div class="col-12">
+    <div class="col-12 d-flex justify-content-end">
       <button type="submit" class="btn btn-primary" [disabled]="!formNewProduct.valid">
         Lưu
       </button>

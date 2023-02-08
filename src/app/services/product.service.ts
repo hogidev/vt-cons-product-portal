@@ -27,6 +27,11 @@ export class ProductService {
     return addDoc(productRef, product);
   }
 
+  addCategory(category: Category) {
+    const categoryRef = collection(this.firestore, 'categories');
+    return addDoc(categoryRef, category);
+  }
+
   async updateProduct(product: Product) {
     const productRef = collection(this.firestore, 'products');
     let q = query(productRef, where('id', '==', product.id));
@@ -65,6 +70,7 @@ export class ProductService {
       const docRef = doc(this.firestore, 'products', document.id);
       await deleteDoc(docRef);
     })
-
   }
+
+
 }

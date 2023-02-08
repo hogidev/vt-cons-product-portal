@@ -45,7 +45,7 @@
     </div>
   </div>
   <div *ngFor="let product of products" class="mb-3">
-    <ng-container *ngIf="product.key">
+    <ng-container *ngIf="product.key; else noProduct">
       <div class="category-header">{{ product.key }}</div>
       <div class="vt-grid vt-lg-grid-cols-4 vt-md-grid-cols-3 vt-sm-grid-cols-2 shadow-sm">
         <div class="card" *ngFor="let item of product.products">
@@ -93,4 +93,7 @@
       </div>
     </ng-container>
   </div>
+  <ng-template #noProduct>
+    <div class="">Không có sản phẩm, vui lòng thêm mới</div>
+  </ng-template>
 </div>

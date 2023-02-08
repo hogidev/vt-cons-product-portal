@@ -23,7 +23,6 @@ export class ProductListComponent implements OnInit {
   showSearchTxt = '';
   categories!: Category[];
   products!: Array<ProductCategory>;
-  imgSrc = '';
 
   constructor(
     private fb: FormBuilder,
