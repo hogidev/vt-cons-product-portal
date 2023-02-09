@@ -1,30 +1,31 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, ElementRef, inject, ViewChild } from '@angular/core';
+import { CommonModule, Location } from '@angular/common';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router, RouterModule } from '@angular/router';
-import { ProductService } from '../../services/product.service';
-import { Category } from './category.interface';
 import { Observable } from 'rxjs';
+import { Category } from '../product-add/category.interface';
+import { ProductService } from '../../services/product.service';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
-  selector: 'app-product-add',
+  selector: 'app-product-edit',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule],
-  templateUrl: './product-add.component.html',
-  styleUrls: ['./product-add.component.scss']
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, RouterModule],
+  templateUrl: './product-edit.component.html',
+  styleUrls: ['./product-edit.component.scss']
 })
-export class ProductAddComponent implements OnInit {
+export class ProductEditComponent {
   @ViewChild('file') fileInput!: ElementRef;
-  formNewProduct!: FormGroup;
+  formEditProduct!: FormGroup;
   categories$!: Observable<Category[]>;
+  _location = inject(Location);
 
   constructor(
     private fb: FormBuilder,
     private productService: ProductService,
     private router: Router
   ) {
-    this.formNewProduct = this.fb.group({
-      id: this.fb.control(new Date().getTime().toString()),
+    this.formEditProduct = this.fb.group({
+      id: this.fb.control(''),
       productName: this.fb.control('', [Validators.required]),
       productCode: this.fb.control('', [Validators.required]),
       productDescription: this.fb.control(''),
@@ -36,18 +37,22 @@ export class ProductAddComponent implements OnInit {
   }
 
   ngOnInit() {
+    const product = (this._location.getState() as any).product;
+    if (product) {
+      this.formEditProduct.patchValue(product);
+    }
     this.categories$ = this.productService.getCategories();
   }
 
   submit() {
-    if (this.formNewProduct.invalid) {
+    if (this.formEditProduct.invalid) {
       return;
     }
-    if (!this.formNewProduct.get('images')?.value) {
+    if (!this.formEditProduct.get('images')?.value) {
       alert('Vui lòng upload ảnh sản phẩm');
       return;
     }
-    this.productService.addProduct(this.formNewProduct.getRawValue());
+    this.productService.updateProduct(this.formEditProduct.getRawValue());
     this.fileInput.nativeElement.value = null;
     this.router.navigate(['products']);
   }
@@ -60,20 +65,20 @@ export class ProductAddComponent implements OnInit {
         return;
       }
     });
-    let images: any[] = this.formNewProduct.get('images')?.value || [];
+    let images: any[] = this.formEditProduct.get('images')?.value || [];
     Object.keys(files)?.forEach((file, i) => {
       const reader = new FileReader();
       reader.readAsDataURL(files[i]);
       reader.onload = () => {
         images.push(reader.result)
-        this.formNewProduct.get('images')?.setValue(images);
+        this.formEditProduct.get('images')?.setValue(images);
       };
     });
   }
 
   deleteImage(index: number) {
     if (index > -1) {
-      this.formNewProduct.get('images')?.value.splice(index, 1);
+      this.formEditProduct.get('images')?.value.splice(index, 1);
     }
   }
 }

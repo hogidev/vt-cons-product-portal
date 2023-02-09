@@ -5,13 +5,12 @@
 export const environment = {
   production: false,
   firebaseConfig: {
-    apiKey: "AIzaSyB9sR1Qz8I-QMSbMQJoVejMZ3i1jcQtUKs",
-    authDomain: "product-portal-test.firebaseapp.com",
-    projectId: "product-portal-test",
-    storageBucket: "product-portal-test.appspot.com",
-    messagingSenderId: "404827587973",
-    appId: "1:404827587973:web:3f26bd984c6687cd1bf0ec",
-    measurementId: "G-Z9VNY5JCYH"
+    apiKey: "AIzaSyD-5HimWOBi1OxPF8569BUWqaKIgSgGYmg",
+    authDomain: "vtc-product-portal.firebaseapp.com",
+    projectId: "vtc-product-portal",
+    storageBucket: "vtc-product-portal.appspot.com",
+    messagingSenderId: "845364782577",
+    appId: "1:845364782577:web:0a72af1e8e1c3438c5d050"
   }
 };
 
