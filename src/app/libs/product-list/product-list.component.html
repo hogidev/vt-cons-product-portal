@@ -15,7 +15,7 @@
           id="search-input"
           class="search-input"
           formControlName="searchText"
-          placeholder="Tìm kiếm sản phẩm"
+          placeholder="Tìm kiếm sản phẩm theo mã sản phẩm hoặc tên sản phẩm"
           maxlength="64"
         />
         <button type="button" class="btn-search-reset" [class.d-none]="!searchForm.get('searchText')?.value" (click)="resetInputSearch()">
@@ -25,10 +25,10 @@
         </button>
       </div>
     </form>
-    <button type="button" class="btn btn-danger" (click)="addProduct()">Thêm mới</button>
+    <button type="button" class="btn btn-danger white-space-no-wrap" (click)="addProduct()">Thêm mới</button>
   </div>
-  <div class="row">
-    <div class="col-2">
+  <div class="row g-4">
+    <div class="col-md-2">
       <p class="fs-5 fw-semibold">Danh mục hàng hoá</p>
       <div class="form-check" *ngFor="let category of categories">
         <input
@@ -42,7 +42,7 @@
         </label>
       </div>
     </div>
-    <div class="col-10">
+    <div class="col-md-10">
       <div class="d-flex justify-content-between mb-3">
         <div>
           <span class="fs-4 fw-semibold">Danh sách sản phẩm </span><span *ngIf="showSearchTxt">(Tìm kiếm {{ showSearchTxt }})</span>
@@ -74,7 +74,9 @@
                   [routerLink]="['/product', product.id]"
                 >
                 <div class="card-body">
-                  <a class="card-title" [routerLink]="['/product', product.id]">{{ product.productName }}</a>
+                  <a class="card-title" [routerLink]="['/product', product.id]">
+                    {{ product.productCode }} - {{ product.productName }}
+                  </a>
                   <div class="price mt-2" *ngIf="product.discount && product.discount > 0">
                     {{ product.price - product.price*(product.discount/100) | currency: 'VND'}}
                   </div>
