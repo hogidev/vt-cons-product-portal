@@ -1,3 +1,5 @@
+import { Category } from './category.interface';
+
 export interface Product {
   id: string;
   productName: string;
@@ -10,7 +12,6 @@ export interface Product {
   images?: string[];
 }
 
-export interface ProductCategory {
-  key: string;
+export interface ProductCategory extends Category{
   products: Product[];
 }

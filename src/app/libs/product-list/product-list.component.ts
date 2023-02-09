@@ -22,7 +22,10 @@ export class ProductListComponent implements OnInit {
   products$!: Observable<Product[]>;
   showSearchTxt = '';
   categories!: Category[];
-  products!: Array<ProductCategory>;
+  productCategories!: Array<ProductCategory>;
+  lstFilterCategory: Category[] = [];
+  ids: string[] = [];
+  isNoProduct = false;
 
   constructor(
     private fb: FormBuilder,
@@ -40,13 +43,15 @@ export class ProductListComponent implements OnInit {
       this.productService.getProducts(),
       this.productService.getCategories()
     ]).subscribe(([products, categories]) => {
+      if (categories && products && categories.length && products.length)
       this.categories = categories;
-      if (products && products.length) {
-        const res = products.reduce((acc: {[key: string]: any} = {}, curr) => (
-          (acc[curr.categoryCode] = acc[curr.categoryCode] || []).push(curr), acc
-        ), {});
-        this.products = Object.keys(res).map(key => ({key: categories.find(item => item.code === key)?.name || '', products: res[key]}));
-      }
+      this.productCategories = categories.map(category => {
+        return {
+          ...category,
+          products: products.filter(i => category.code === i.categoryCode)
+        }
+      });
+      this.isNoProduct = !this.productCategories.some(item => item.products.length > 0);
     });
   }
 
@@ -58,13 +63,7 @@ export class ProductListComponent implements OnInit {
 
   submitSearchForm() {
     this.showSearchTxt = this.searchForm.get('searchText')?.value;
-    if (this.searchForm.get('searchText')?.value) {
-      this.getProduct(this.searchForm.get('searchText')?.value);
-      // this.products$ = this.productService.getProducts(this.searchForm.get('searchText')?.value);
-    } else {
-      this.getProduct();
-      // this.products$ = this.productService.getProducts();
-    }
+    this.getProduct();
   }
 
   addProduct() {
@@ -75,16 +74,21 @@ export class ProductListComponent implements OnInit {
     this.typeView = type;
   }
 
-  getProduct(filter?: string) {
+  getProduct() {
     this.productService.getProducts().subscribe((products) => {
       if (products && products.length) {
-        if (filter) {
+        if (this.searchForm.get('searchText')?.value) {
+          const filter = this.searchForm.get('searchText')?.value;
           products = products.filter(item => item.productCode.includes(filter) || item.productName.includes(filter));
         }
-        const res = products.reduce((acc: {[key: string]: any} = {}, curr) => (
-          (acc[curr.categoryCode] = acc[curr.categoryCode] || []).push(curr), acc
-        ), {});
-        this.products = Object.keys(res).map(key => ({key: this.categories.find(item => item.code === key)?.name || '', products: res[key]}));
+        const filterCategories = this.lstFilterCategory.length ? this.lstFilterCategory : this.categories;
+        this.productCategories = filterCategories.map(category => {
+          return {
+            ...category,
+            products: products.filter(i => category.code === i.categoryCode)
+          }
+        });
+        this.isNoProduct = !this.productCategories.some(item => item.products.length > 0);
       }
     });
   }
@@ -101,5 +105,17 @@ export class ProductListComponent implements OnInit {
         product
       }
     });
+  }
+
+  filterCategoryChange(event: any) {
+    if (event.target.checked && this.ids.indexOf(event.target.value) === -1) {
+      this.ids.push(event.target.value);
+    }
+    if (!event.target.checked) {
+      const index = this.ids.indexOf(event.target.value);
+      this.ids.splice(index, 1);
+    }
+    this.lstFilterCategory = this.categories.filter(i => this.ids.includes(i.id));
+    this.getProduct();
   }
 }
