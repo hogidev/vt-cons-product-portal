@@ -5,6 +5,7 @@ import { ProductAddComponent } from './libs/product-add/product-add.component';
 import { ProductDetailComponent } from './libs/product-detail/product-detail.component';
 import { CategoryAddComponent } from './libs/category-add/category-add.component';
 import { ProductEditComponent } from './libs/product-edit/product-edit.component';
+import { CategoryListComponent } from './libs/category-list/category-list.component';
 
 export const routes: Routes = [
   {
@@ -31,6 +32,10 @@ export const routes: Routes = [
   {
     path: 'category',
     component: CategoryAddComponent
+  },
+  {
+    path: 'categories',
+    component: CategoryListComponent
   }
 ];
 

@@ -72,5 +72,25 @@ export class ProductService {
     })
   }
 
+  async updateCategory(category: Category) {
+    const productRef = collection(this.firestore, 'categories');
+    let q = query(productRef, where('id', '==', category.id));
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach(async (document) => {
+      const docRef = doc(this.firestore, 'categories', document.id);
+      await updateDoc(docRef, {
+        ...category
+      })
+    });
+  }
 
+  async deleteCategory(id: string) {
+    const productRef = collection(this.firestore, 'categories');
+    let q = query(productRef, where('id', '==', id));
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach(async (document) => {
+      const docRef = doc(this.firestore, 'categories', document.id);
+      await deleteDoc(docRef);
+    })
+  }
 }

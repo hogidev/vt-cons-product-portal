@@ -5,3 +5,19 @@ body {
 button[disabled] {
   cursor: not-allowed;
 }
+
+.border-right {
+  border-right: 1px solid #333333;
+}
+
+.primary-color {
+  color: #333333!important;
+}
+
+.menu-btn {
+  color: rgba(0,0,0,0.6);
+
+  &:hover {
+    color: #333333;
+  }
+}

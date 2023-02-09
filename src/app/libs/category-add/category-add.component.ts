@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, inject, OnInit } from '@angular/core';
+import { CommonModule, Location } from '@angular/common';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ProductService } from '../../services/product.service';
 import { Router, RouterModule } from '@angular/router';
@@ -11,8 +11,10 @@ import { Router, RouterModule } from '@angular/router';
   templateUrl: './category-add.component.html',
   styleUrls: ['./category-add.component.scss']
 })
-export class CategoryAddComponent {
+export class CategoryAddComponent implements OnInit {
   categoryForm!: FormGroup;
+  _location = inject(Location);
+  isEdit = false;
 
   constructor(
     private fb: FormBuilder,
@@ -26,11 +28,23 @@ export class CategoryAddComponent {
     });
   }
 
+  ngOnInit() {
+    const category = (this._location.getState() as any).category;
+    if (category) {
+      this.categoryForm.patchValue(category);
+      this.isEdit = true;
+    }
+  }
+
   submit() {
     if (this.categoryForm.invalid) {
       return;
     }
-    this.productService.addCategory(this.categoryForm.getRawValue());
-    this.router.navigate(['products']);
+    if (this.isEdit) {
+      this.productService.updateCategory(this.categoryForm.getRawValue());
+    } else {
+      this.productService.addCategory(this.categoryForm.getRawValue());
+    }
+    this.router.navigate(['categories']);
   }
 }
